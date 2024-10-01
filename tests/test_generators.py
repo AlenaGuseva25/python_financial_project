@@ -1,3 +1,4 @@
+from typing import Any
 
 from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
 
@@ -41,8 +42,18 @@ def test_filter_by_currency(transaction_list, code):
         }
 
 
-def test_transaction_descriptions():
-    pass
+def test_transaction_descriptions(transaction_list):
+    number = transaction_descriptions(transaction_list)
+
+    assert next(number) == "Перевод организации"
+    assert next(number) == "Перевод со счета на счет"
+    assert next(number) == "Перевод со счета на счет"
+    assert next(number) == "Перевод с карты на карту"
+
+
 
 def test_card_number_generator():
-    pass
+    card_number = card_number_generator(9999999999999997, 9999999999999999)
+
+    assert next(card_number)
+    assert next(card_number)
