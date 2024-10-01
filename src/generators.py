@@ -1,5 +1,3 @@
-
-
 def filter_by_currency(transactions, code="USD"):
     """Функция возвращает итератор, с соответствующей валютой заданной в параметре"""
     if len(transactions) > 0:
@@ -10,7 +8,7 @@ def filter_by_currency(transactions, code="USD"):
         raise StopIteration("Введен пустой список")
 
 
-def transaction_descriptions(transactions):
+def transaction_descriptions(transactions: list[dict[str, str]]):
     """Функция принимает список словарей с транзакций и возвращает описание каждой"""
     if not transactions:
         print("Нет транзакций")
