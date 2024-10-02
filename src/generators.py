@@ -1,5 +1,5 @@
 def filter_by_currency(transactions, code="USD"):
-    """ Функция возвращает итератор, с соответствующей валютой заданной в параметре """
+    """Функция, возвращает итератор, с соответствующей валютой заданной в параметре"""
     if len(transactions) > 0:
         for transaction in transactions:
             if transaction["operationAmount"]["currency"]["code"] == code:
@@ -9,7 +9,7 @@ def filter_by_currency(transactions, code="USD"):
 
 
 def transaction_descriptions(transactions: list[dict[str, str]]):
-    """ Функция принимает список словарей с транзакций и возвращает описание каждой """
+    """Функци, япринимает список словарей с транзакций и возвращает описание каждой"""
     if not transactions:
         print("Нет транзакций")
     for description in transactions:
@@ -17,7 +17,7 @@ def transaction_descriptions(transactions: list[dict[str, str]]):
 
 
 def card_number_generator(start, stop):
-    """ Функция генерирует номера карт в заданном диапазоне """
+    """Функция, генерирует номера карт в заданном диапазоне"""
     for number in range(start, stop + 1):
         card_number = str(number)
         while len(card_number) < 16:
