@@ -7,24 +7,32 @@ def log(filename=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            log_message = f"{func.__name__} started with inputs: {args}, {kwargs}\n"
             if not filename:
-                print(f"{func.__name__} started")
-                try:
-                    func(*args, **kwargs)
-                    print(f"{func.__name__} ok")
-                    print(f"{func.__name__} finished")
-                except Exception as e:
-                    print(f"{func.__name__} error: {e}. Inputs: {args}, {kwargs}")
+                print(log_message, end="")
             else:
-                try:
-                    func(*args, **kwargs)
-                    with open(filename, "w") as file:
-                        file.write(f"{func.__name__} ok")
-                except Exception as e:
-                    with open(filename, "w") as file:
-                        file.write(f"{func.__name__} error: {e}. Inputs: {args}, {kwargs}")
-            # return result
+                with open(filename, "a") as file:
+                    file.write(log_message)
+
+            try:
+                result = func(*args, **kwargs)
+                log_message = f"{func.__name__} ok, result: {result}\n "
+                if not filename:
+                    print(log_message, end="")
+                else:
+                    with open(filename, "a") as file:
+                        file.write(log_message)
+                return result
+            except Exception as e:
+                log_message = f"{func.__name__} error: {e}\n"
+                if not filename:
+                    print(log_message, end="")
+                else:
+                    with open(filename, "a") as file:
+                        file.write(log_message)
+                raise
 
         return wrapper
+
 
     return decorator
