@@ -36,3 +36,8 @@ def log(filename=None):
 
 
     return decorator
+
+
+@log(filename="log.txt")
+def add(a, b):
+    return a + b
