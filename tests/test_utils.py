@@ -23,9 +23,21 @@ def test_financial_transaction_not_a_list():
 
 def test_financial_transaction_valid_list():
     with patch('os.path.exists', return_value=True):
-        expected_data = [{"id": 1, "amount": 100, "currency": "USD"}]
+        expected_data = [
+    {
+        "id": 619287771,
+        "state": "EXECUTED",
+        "date": "2019-08-19T16:30:41.967497",
+        "operationAmount": {
+            "amount": "81150.87",
+            "currency": {
+                "name": "USD",
+                "code": "USD"
+            }
+        }
+    }
+]
         with patch("builtins.open", mock_open(read_data=json.dumps(expected_data))):
-            with patch('json.load', return_value=expected_data):
-                assert financial_transactions("Действительный файл.json") == expected_data
+            assert financial_transactions("Действительный файл.json") == expected_data
 
 
