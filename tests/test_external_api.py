@@ -1,5 +1,4 @@
 from unittest.mock import patch
-import requests
 import pytest
 
 
@@ -7,14 +6,9 @@ from src.external_api import convert_to_rub
 
 
 def test_convert_to_rub_success_usd():
-    transaction = {
-        "operationAmount": {
-            "currency": {"code": "USD"},
-            "amount": "100"
-        }
-    }
+    transaction = {"operationAmount": {"currency": {"code": "USD"}, "amount": "100"}}
 
-    with patch('requests.get') as mock_get:
+    with patch("requests.get") as mock_get:
         mock_get.return_value.json.return_value = {"result": 7500.0}
 
         result = convert_to_rub(transaction)
@@ -23,14 +17,9 @@ def test_convert_to_rub_success_usd():
 
 
 def test_convert_to_rub_success_euro():
-    transaction = {
-        "operationAmount": {
-            "currency": {"code": "EUR"},
-            "amount": "100"
-        }
-    }
+    transaction = {"operationAmount": {"currency": {"code": "EUR"}, "amount": "100"}}
 
-    with patch('requests.get') as mock_get:
+    with patch("requests.get") as mock_get:
         mock_get.return_value.json.return_value = {"result": 8500.0}
 
         result = convert_to_rub(transaction)
@@ -39,13 +28,7 @@ def test_convert_to_rub_success_euro():
 
 
 def test_convert_to_rub_rub_success():
-    transaction = {
-        "operationAmount": {
-            "currency": {"code": "RUB"},
-            "amount": "100"
-        }
-    }
-
+    transaction = {"operationAmount": {"currency": {"code": "RUB"}, "amount": "100"}}
 
 
 def test_convert_to_rub_invalid_input():
@@ -60,11 +43,4 @@ def test_convert_to_rub_invalid_input():
 
 
 def test_convert_to_rub_no_currency_or_amount():
-    transaction = {
-        "operationAmount": {
-            "currency": {"code": None},
-            "amount": None
-        }
-    }
-
-
+    transaction = {"operationAmount": {"currency": {"code": None}, "amount": None}}
