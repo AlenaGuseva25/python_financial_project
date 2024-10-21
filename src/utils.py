@@ -2,7 +2,7 @@ import os
 import json
 import logging
 
-# используется для записи сообщений об ошибках в журнал
+
 logger = logging.getLogger(__name__)
 
 
