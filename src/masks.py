@@ -26,8 +26,8 @@ def get_mask_card_number(entering_the_card_number: str) -> str:
 
 def get_mask_account(entering_the_account_number: str) -> str:
     """Функция возвращающая маску счета"""
-    if len(entering_the_account_number) < 4 or not entering_the_account_number.isdigit():
-        logger.error("Некорректный номер счета. Должен содержать как минимум 4 цифры")
+    if len(entering_the_account_number) < 20 or not entering_the_account_number.isdigit():
+        logger.error("Некорректный номер счета. Должен содержать как минимум 20 цифр")
         return "Некорректный номер счета"
     masked_account = f"**{entering_the_account_number[-4:]}"
     logger.info(f"Создана маска счета: {masked_account}")
