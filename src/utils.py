@@ -3,11 +3,11 @@ import json
 import logging
 
 
-logger = logging.getLogger('utils')
+logger = logging.getLogger("utils")
 logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler('utils.log')
+file_handler = logging.FileHandler("utils.log")
 file_handler.setLevel(logging.DEBUG)
-file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
@@ -34,5 +34,5 @@ def financial_transactions(file_path):
 
 
 if __name__ == "__main__":
-    result = financial_transactions('transactions.json')
+    result = financial_transactions("transactions.json")
     print(f"Результат: {result}")
