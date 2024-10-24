@@ -5,8 +5,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
-PATH_TO_CSV_FILE = BASE_DIR / '../data/transactions.csv'
-PATH_TO_EXCEL_FILE = BASE_DIR / '../data/transactions_excel.xlsx'
+PATH_TO_CSV_FILE = BASE_DIR / "../data/transactions.csv"
+PATH_TO_EXCEL_FILE = BASE_DIR / "../data/transactions_excel.xlsx"
 
 
 def reader_file_transaction_csv(csv_path):
@@ -14,7 +14,7 @@ def reader_file_transaction_csv(csv_path):
     transaction_list = []
     try:
         with open(csv_path, "r", encoding="utf-8") as transactions:
-            reader = csv.DictReader(transactions, delimiter=';')
+            reader = csv.DictReader(transactions, delimiter=";")
             for row in reader:
                 transaction_list.append(
                     {
