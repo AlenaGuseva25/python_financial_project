@@ -27,10 +27,6 @@ def test_convert_to_rub_success_euro():
         mock_get.assert_called_once()
 
 
-def test_convert_to_rub_rub_success():
-    transaction = {"operationAmount": {"currency": {"code": "RUB"}, "amount": "100"}}
-
-
 def test_convert_to_rub_invalid_input():
     with pytest.raises(ValueError, match="Входными данными должен быть словарь"):
         convert_to_rub("invalid input")
@@ -44,3 +40,5 @@ def test_convert_to_rub_invalid_input():
 
 def test_convert_to_rub_no_currency_or_amount():
     transaction = {"operationAmount": {"currency": {"code": None}, "amount": None}}
+    with pytest.raises(ValueError, match="Неверные данные транзакции"):
+        convert_to_rub(transaction)

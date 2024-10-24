@@ -2,7 +2,6 @@ import pandas as pd
 import csv
 from pathlib import Path
 
-from tests.conftest import transaction_list
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -64,11 +63,3 @@ def reader_file_transaction_excel(excel_path):
         print(f"Error reading Excel: {e}")
         return []
     return transaction_list
-
-
-
-
-
-
-
-

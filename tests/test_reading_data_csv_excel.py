@@ -7,7 +7,8 @@ from src.reading_data_csv_excel import reader_file_transaction_csv, reader_file_
 class TestTransactionReaders(unittest.TestCase):
 
     @patch("builtins.open", new_callable=mock_open,
-           read_data="id;state;date;amount;currency_name;currency_code;from;to;description\n1;completed;2023-01-01;100;USD;840;account1;account2;Transaction 1")
+           read_data="id;state;date;amount;currency_name;currency_code;from;to;description"
+                     "\n1;completed;2023-01-01;100;""USD;840;account1;account2;Transaction 1")
     def test_reader_file_transaction_csv(self, mock_file):
         csv_path = "dummy_path.csv"
         expected_result = [{
