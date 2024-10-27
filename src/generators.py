@@ -9,7 +9,7 @@ def filter_by_currency(transactions, code="USD"):
 
 
 def transaction_descriptions(transactions: list[dict[str, str]]):
-    """Функци, япринимает список словарей с транзакций и возвращает описание каждой"""
+    """Функция принимает список словарей с транзакций и возвращает описание каждой"""
     if not transactions:
         print("Нет транзакций")
     for description in transactions:
