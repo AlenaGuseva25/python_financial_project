@@ -1,20 +1,18 @@
-import os
 from _datetime import datetime
-import re  # Не забудьте импортировать re для поиска в строках
 
 from src.masks import get_mask_account, get_mask_card_number
-from src.widget import get_new_data
 from src.processing import sort_by_date, filter_by_state
-from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
-from src.decorators import log
+from src.generators import filter_by_currency
 from src.utils import financial_transactions
-from src.external_api import convert_to_rub
 from src.reading_data_csv_excel import reader_file_transaction_csv, reader_file_transaction_excel
-from src.dictonary_search import search_transactions, count_transactions
+from src.dictonary_search import search_transactions
 
 json_file = financial_transactions(r"C:\Users\Alena\python\python_financial_project\data\operations.json")
 csv_file = reader_file_transaction_csv(r"C:\Users\Alena\python\python_financial_project\data\transactions.csv")
-excel_file = reader_file_transaction_excel(r"C:\Users\Alena\python\python_financial_project\data\transactions_excel.xlsx")
+excel_file = reader_file_transaction_excel(
+    r"C:\Users\Alena\python\python_financial_project\data\transactions_excel.xlsx"
+)
+
 
 def main():
     """Отвечает за основную логику проекта с пользователем,
@@ -41,7 +39,6 @@ def main():
         print("Введен некорректный номер.")
         return
 
-    # Проверка на наличие транзакций
     if not transactions_from_file:
         print("Нет доступных транзакций для обработки.")
         return
@@ -112,7 +109,6 @@ def main():
         masked_card_to = get_mask_card_number(str(trans.get("to")))
         amount = trans.get("operationAmount", {}).get("amount", trans.get("amount", 0))
 
-        # Вывод информации о транзакциях
         if user_input_file == "1":
             if "Счет" in trans.get("from", "") and "Счет" in trans.get("to", ""):
                 print(f"{correct_date} {description}")
@@ -139,6 +135,7 @@ def main():
                 print(f"{correct_date} {description}")
                 print(f"Транзакция: {masked_card_from} -> {masked_card_to}")
                 print(f"Сумма: {amount} {trans['currency_code']}\n")
+
 
 if __name__ == "__main__":
     main()
