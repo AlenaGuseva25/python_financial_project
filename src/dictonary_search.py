@@ -10,7 +10,7 @@ csv_file = reader_file_transaction_csv("..//data/transactions.csv")
 excel_file = reader_file_transaction_excel("..//data/transactions_excel.xlsx")
 
 
-def search_transactions(transactions: list[dict], search_string: str) -> list[dict]:
+def search_transactions(transactions, search_string):
     """Функция принимает список словарей с данными о банковских операциях и строку поиска,
     а возвращает список словарей, у которых в описании есть данная строка"""
     results = []

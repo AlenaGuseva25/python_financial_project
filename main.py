@@ -1,5 +1,6 @@
 import os
 from _datetime import datetime
+import re  # Не забудьте импортировать re для поиска в строках
 
 from src.masks import get_mask_account, get_mask_card_number
 from src.widget import get_new_data
@@ -11,10 +12,9 @@ from src.external_api import convert_to_rub
 from src.reading_data_csv_excel import reader_file_transaction_csv, reader_file_transaction_excel
 from src.dictonary_search import search_transactions, count_transactions
 
-json_file = financial_transactions("../data/operations.json")
-csv_file = reader_file_transaction_csv("../data/transactions.csv")
-excel_file = reader_file_transaction_excel("../data/transactions_excel.xlsx")
-
+json_file = financial_transactions(r"C:\Users\Alena\python\python_financial_project\data\operations.json")
+csv_file = reader_file_transaction_csv(r"C:\Users\Alena\python\python_financial_project\data\transactions.csv")
+excel_file = reader_file_transaction_excel(r"C:\Users\Alena\python\python_financial_project\data\transactions_excel.xlsx")
 
 def main():
     """Отвечает за основную логику проекта с пользователем,
@@ -29,19 +29,21 @@ def main():
     user_input_file = input("Введите номер пункта: ")
 
     if user_input_file == "1":
-        json_file = financial_transactions("../data/operations.json")
-        print("Для обработки выбран JSON-файл.")
         transactions_from_file = json_file
+        print("Для обработки выбран JSON-файл.")
     elif user_input_file == "2":
-        csv_file = reader_file_transaction_csv("../data/transactions.csv")
-        print("Для обработки выбран CSV-файл.")
         transactions_from_file = csv_file
+        print("Для обработки выбран CSV-файл.")
     elif user_input_file == "3":
-        excel_file = reader_file_transaction_excel("../data/transactions_excel.xlsx")
-        print("Для обработки выбран XLSX-файл.")
         transactions_from_file = excel_file
+        print("Для обработки выбран XLSX-файл.")
     else:
         print("Введен некорректный номер.")
+        return
+
+    # Проверка на наличие транзакций
+    if not transactions_from_file:
+        print("Нет доступных транзакций для обработки.")
         return
 
     while True:
@@ -55,6 +57,7 @@ def main():
             continue
         print(f"Операции отфильтрованы по статусу {user_state}")
         filter_state = filter_by_state(transactions_from_file, user_state)
+        print(f"Количество транзакций после фильтрации по статусу: {len(filter_state)}")
         break
 
     print("Отсортировать операции по дате? Да/Нет")
@@ -62,15 +65,8 @@ def main():
     if user_date == "да":
         print("Отсортировать по возрастанию или по убыванию?")
         user_input_up_down = input("в порядке убывания / в порядке возрастания ").lower()
-        if user_input_up_down == "в порядке убывания":
-            reversed = True
-            filter_transaction_date = sort_by_date(filter_state, reversed)
-        elif user_input_up_down == "в порядке возрастания":
-            reversed = False
-            filter_transaction_date = sort_by_date(filter_state, reversed)
-        else:
-            print("Введен некорректный ответ.")
-            return
+        reversed = user_input_up_down == "в порядке убывания"
+        filter_transaction_date = sort_by_date(filter_state, reversed)
     elif user_date == "нет":
         filter_transaction_date = filter_state
     else:
@@ -79,14 +75,9 @@ def main():
 
     print("Выводить только рублевые транзакции? Да/Нет")
     user_input_curr = input("Введите да или нет: ").lower()
-    rub_trans = []
     if user_input_curr == "да":
-        for trans in filter_transaction_date:
-            if (user_input_file == "1" or user_input_file == "2") and trans["operationAmount"]["currency"][
-                "code"] == "RUB":
-                rub_trans.append(trans)
-            elif user_input_file == "3" and trans["currency_code"] == "RUB":
-                rub_trans.append(trans)
+        rub_trans = list(filter_by_currency(filter_transaction_date, "RUB"))
+        print(f"Количество рублевых транзакций: {len(rub_trans)}")
     elif user_input_curr == "нет":
         rub_trans = filter_transaction_date
     else:
@@ -95,12 +86,10 @@ def main():
 
     print("Отфильтровать список транзакций по определенному слову в описании? Да/Нет")
     sort_by_word = input("Введите да или нет: ").lower()
-    trans_word = []
     if sort_by_word == "да":
         sort_by_word_yes = input("Введите слово для фильтрации: ")
-        for trans in rub_trans:
-            if sort_by_word_yes in trans["description"]:
-                trans_word.append(trans)
+        trans_word = search_transactions(rub_trans, sort_by_word_yes)
+        print(f"Количество транзакций после фильтрации по слову: {len(trans_word)}")
     elif sort_by_word == "нет":
         trans_word = rub_trans
     else:
@@ -123,6 +112,7 @@ def main():
         masked_card_to = get_mask_card_number(str(trans.get("to")))
         amount = trans.get("operationAmount", {}).get("amount", trans.get("amount", 0))
 
+        # Вывод информации о транзакциях
         if user_input_file == "1":
             if "Счет" in trans.get("from", "") and "Счет" in trans.get("to", ""):
                 print(f"{correct_date} {description}")
@@ -149,7 +139,6 @@ def main():
                 print(f"{correct_date} {description}")
                 print(f"Транзакция: {masked_card_from} -> {masked_card_to}")
                 print(f"Сумма: {amount} {trans['currency_code']}\n")
-
 
 if __name__ == "__main__":
     main()
