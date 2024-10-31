@@ -1,6 +1,6 @@
 from _datetime import datetime
 
-from src.masks import get_mask_account, get_mask_card_number
+from src.widget import mask_account_card
 from src.processing import sort_by_date, filter_by_state
 from src.generators import filter_by_currency
 from src.utils import financial_transactions
@@ -105,8 +105,11 @@ def main():
         bad_date = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S")
         correct_date = bad_date.strftime("%d.%m.%Y")
         description = trans.get("description", "")
-        masked_card_from = get_mask_card_number(str(trans.get("from")))
-        masked_card_to = get_mask_card_number(str(trans.get("to")))
+
+        # Используем mask_account_card для маскирования
+        masked_card_from = mask_account_card(str(trans.get("from")))
+        masked_card_to = mask_account_card(str(trans.get("to")))
+
         amount = trans.get("operationAmount", {}).get("amount", trans.get("amount", 0))
 
         if user_input_file == "1":
